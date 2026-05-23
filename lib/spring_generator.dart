@@ -1,0 +1,134 @@
+import 'dart:io';
+
+String toPascalCase(String text) {
+  if (!text.contains('-') && !text.contains('_')) {
+    return text[0].toUpperCase() + text.substring(1);
+  }
+  return text.split(RegExp(r'[-_]')).map((word) {
+    if (word.isEmpty) return '';
+    return word[0].toUpperCase() + word.substring(1).toLowerCase();
+  }).join('');
+}
+
+// 1. අනාගතයේදී CLI argument එකකින් ගන්න පුළුවන් විදිහට Base Package එකක් හදාගමු
+const String basePackage = "com.callisto.app";
+
+void generateSpringFeature(String featureName) {
+  final featureDir = Directory(featureName);
+
+  if (featureDir.existsSync()) {
+    print('⚠️ Error: "$featureName" නමින් feature එකක් දැනටමත් තියෙනවා!');
+    exit(1);
+  }
+
+  print('📂 Creating directories for $featureName...');
+  featureDir.createSync(recursive: true);
+
+  final subFolders = ['controller', 'service', 'repository', 'dto', 'entity'];
+  for (var folder in subFolders) {
+    Directory('${featureDir.path}/$folder').createSync();
+  }
+
+  final className = toPascalCase(featureName);
+  final featurePackage = featureName.replaceAll('-', '').toLowerCase();
+  final fullPackage = '$basePackage.$featurePackage';
+
+  print('📄 Generating Spring Boot Boilerplate code...');
+
+  // 2. Templates හරහා Files ඇතුළට Code එක ලිවීම
+  File('${featureDir.path}/controller/${className}Controller.java')
+      .writeAsStringSync(getControllerTemplate(fullPackage, className, featureName));
+
+  File('${featureDir.path}/service/${className}Service.java')
+      .writeAsStringSync(getServiceTemplate(fullPackage, className));
+
+  File('${featureDir.path}/repository/${className}Repository.java')
+      .writeAsStringSync(getRepositoryTemplate(fullPackage, className));
+
+  File('${featureDir.path}/entity/${className}.java')
+      .writeAsStringSync(getEntityTemplate(fullPackage, className, featureName));
+
+  print('✅ අලුත් Spring Boot Feature එක සාර්ථකව generate කරා!');
+}
+
+// ==========================================
+// 💡 TEMPLATE ENGINE (Boilerplate Codes)
+// ==========================================
+
+String getControllerTemplate(String pkg, String className, String featureName) => '''
+package $pkg.controller;
+
+import $pkg.service.${className}Service;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/v1/${featureName.replaceAll('-', '/')}")
+public class ${className}Controller {
+
+    private final ${className}Service service;
+
+    public ${className}Controller(${className}Service service) {
+        this.service = service;
+    }
+
+    @GetMapping
+    public ResponseEntity<String> testEndpoint() {
+        return ResponseEntity.ok("$className Feature is working perfectly!");
+    }
+}
+''';
+
+String getServiceTemplate(String pkg, String className) => '''
+package $pkg.service;
+
+import $pkg.repository.${className}Repository;
+import org.springframework.stereotype.Service;
+
+@Service
+public class ${className}Service {
+
+    private final ${className}Repository repository;
+
+    public ${className}Service(${className}Repository repository) {
+        this.repository = repository;
+    }
+}
+''';
+
+String getRepositoryTemplate(String pkg, String className) => '''
+package $pkg.repository;
+
+import $pkg.entity.$className;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface ${className}Repository extends JpaRepository<$className, Long> {
+}
+''';
+
+String getEntityTemplate(String pkg, String className, String featureName) => '''
+package $pkg.entity;
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "${featureName.replaceAll('-', '_')}")
+public class $className {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    // TODO: Add extra fields here
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+}
+''';
