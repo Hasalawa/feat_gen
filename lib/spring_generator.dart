@@ -48,7 +48,7 @@ void generateSpringFeature(String featureName) {
   File('${featureDir.path}/entity/${className}.java')
       .writeAsStringSync(getEntityTemplate(fullPackage, className, featureName));
 
-  print('✅ අලුත් Spring Boot Feature එක සාර්ථකව generate කරා!');
+  print('✅ The new Spring Boot feature was successfully generated!');
 }
 
 // ==========================================

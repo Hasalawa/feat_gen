@@ -44,7 +44,10 @@ void main(List<String> arguments) {
         exit(1); // Error එකක් එක්ක program එක නවත්තනවා
       }
 
-      print('🚀 Generating Feature-First structure...');
+      print('===============================================');
+      print('Generating Feature-First structure...');
+      print('===============================================\n');
+
       print('📌 Feature: $featureName');
       print('🛠️ Framework: $framework\n');
 
