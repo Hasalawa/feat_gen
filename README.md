@@ -1,4 +1,4 @@
-# 🚀 FeatGen - Feature-First Architecture Generator
+# FeatGen - Feature-First Architecture Generator
 
 ![Dart](https://img.shields.io/badge/Built_with-Dart-0175C2?logo=dart)
 ![Spring Boot](https://img.shields.io/badge/Target-Spring_Boot-6DB33F?logo=spring)
@@ -95,5 +95,3 @@ If you'd like to help add **Flutter (Dart)** support to the template engine, ple
 ## 📜 License
 
 Distributed under the MIT License. See `LICENSE` for more information.
-
-```
