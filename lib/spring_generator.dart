@@ -10,14 +10,14 @@ String toPascalCase(String text) {
   }).join('');
 }
 
-// 1. අනාගතයේදී CLI argument එකකින් ගන්න පුළුවන් විදිහට Base Package එකක් හදාගමු
+// 1. Let's set a Base Package that can be taken from a CLI argument in the future
 const String basePackage = "com.callisto.app";
 
-void generateSpringFeature(String featureName) {
+void generateSpringFeature(String featureName, String basePackage) {
   final featureDir = Directory(featureName);
 
   if (featureDir.existsSync()) {
-    print('⚠️ Error: "$featureName" නමින් feature එකක් දැනටමත් තියෙනවා!');
+    print('⚠️ Error: A feature named "$featureName" already exists!');
     exit(1);
   }
 
@@ -35,7 +35,7 @@ void generateSpringFeature(String featureName) {
 
   print('📄 Generating Spring Boot Boilerplate code...');
 
-  // 2. Templates හරහා Files ඇතුළට Code එක ලිවීම
+  // 2. Writing code into files using templates
   File('${featureDir.path}/controller/${className}Controller.java')
       .writeAsStringSync(getControllerTemplate(fullPackage, className, featureName));
 
@@ -52,7 +52,7 @@ void generateSpringFeature(String featureName) {
 }
 
 // ==========================================
-// 💡 TEMPLATE ENGINE (Boilerplate Codes)
+// TEMPLATE ENGINE (Boilerplate Codes)
 // ==========================================
 
 String getControllerTemplate(String pkg, String className, String featureName) => '''
