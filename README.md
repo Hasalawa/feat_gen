@@ -1,11 +1,10 @@
-```markdown
 # 🚀 FeatGen - Feature-First Architecture Generator
 
 ![Dart](https://img.shields.io/badge/Built_with-Dart-0175C2?logo=dart)
 ![Spring Boot](https://img.shields.io/badge/Target-Spring_Boot-6DB33F?logo=spring)
 ![License](https://img.shields.io/badge/License-MIT-blue.svg)
 
-**FeatGen** is a lightning-fast Command Line Interface (CLI) tool designed to automate the creation of **Feature-First Architecture** structures for modern software projects. 
+**FeatGen** is a lightning-fast Command Line Interface (CLI) tool designed to automate the creation of **Feature-First Architecture** structures for modern software projects.
 
 Instead of manually creating layers (Controllers, Services, Repositories) and typing repetitive boilerplate code, FeatGen generates a complete, ready-to-code feature package in milliseconds. Currently optimized for **Spring Boot (Java)**, with Flutter support coming soon!
 
