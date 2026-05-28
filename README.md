@@ -2,20 +2,22 @@
 
 ![Dart](https://img.shields.io/badge/Built_with-Dart-0175C2?logo=dart)
 ![Spring Boot](https://img.shields.io/badge/Target-Spring_Boot-6DB33F?logo=spring)
+![Flutter](https://img.shields.io/badge/Target-Flutter-02569B?logo=flutter)
 ![License](https://img.shields.io/badge/License-MIT-blue.svg)
 
 **FeatGen** is a lightning-fast Command Line Interface (CLI) tool designed to automate the creation of **Feature-First Architecture** structures for modern software projects.
 
-Instead of manually creating layers (Controllers, Services, Repositories) and typing repetitive boilerplate code, FeatGen generates a complete, ready-to-code feature package in milliseconds. Currently optimized for **Spring Boot (Java)**, with Flutter support coming soon!
+Instead of manually creating folders and typing repetitive boilerplate code, FeatGen generates a complete, ready-to-code feature package in milliseconds. It currently supports both **Spring Boot (Java)** and **Flutter (Dart)**!
 
 ---
 
 ## ✨ Key Features
 
-* **⚡ Instant Generation:** Generates `controller`, `service`, `repository`, `dto`, and `entity` layers instantly.
-* **📦 Auto Boilerplate:** Automatically writes standard Spring Boot annotations (`@RestController`, `@Service`, `@Repository`, `@Entity`) and constructor injections.
+* **⚡ Instant Generation:** Generates complete feature layers for both backend and frontend instantly.
+* **☕ Spring Boot Ready:** Automatically writes standard Java annotations (`@RestController`, `@Service`, `@Repository`, `@Entity`) and constructor injections.
+* **📱 Flutter Ready:** Generates UI screens, state controllers, models, and API services with standard Flutter boilerplate.
 * **🎯 Custom Packages:** Define your own base package dynamically using the `--package` flag.
-* **standalone Executable:** Compiled as a native `.exe` file. You don't need Dart or Java installed on your machine to run the tool!
+* **🚀 Standalone Executable:** Compiled as a native `.exe` file. You don't need Dart or Java installed on your machine to run the tool!
 
 ---
 
@@ -33,16 +35,11 @@ Instead of manually creating layers (Controllers, Services, Repositories) and ty
 
 ## 💻 Usage
 
-Navigate to your Spring Boot project's root directory (or your base package folder) in the terminal and run:
+Navigate to your project's root directory in the terminal and run the generation commands. 
 
-### Basic Command (Default Package)
-```bash
-feat_gen create product-catalog
+### Spring Boot (Default)
 
-```
-
-### With a Custom Base Package
-
+Create a Spring Boot feature with a custom base package:
 ```bash
 feat_gen create payment-gateway --package com.yourcompany.app
 
@@ -51,7 +48,16 @@ feat_gen create payment-gateway --package com.yourcompany.app
 *(Or use the shorthand `-p`)*
 
 ```bash
-feat_gen create user-profile -p com.ecommerce.shop
+feat_gen create order-management -p com.ecommerce.shop
+
+```
+
+### Flutter
+
+Use the `--framework` or `-f` flag to target Flutter:
+
+```bash
+feat_gen create user-profile -f flutter
 
 ```
 
@@ -59,7 +65,9 @@ feat_gen create user-profile -p com.ecommerce.shop
 
 ## 📂 What it Generates
 
-If you run `feat_gen create order-management -p com.shop.app`, it will automatically create the following structure and populate the files with valid Java code:
+### 1. Spring Boot Output
+
+If you run `feat_gen create order-management -p com.shop.app`, it generates:
 
 ```text
 order-management/
@@ -77,12 +85,30 @@ order-management/
 
 ```
 
+### 2. Flutter Output
+
+If you run `feat_gen create user-profile -f flutter`, it generates:
+
+```text
+user-profile/
+├── screens/
+│   └── user_profile_screen.dart
+├── controllers/
+│   └── user_profile_controller.dart
+├── models/
+│   └── user_profile_model.dart
+├── services/
+│   └── user_profile_service.dart
+└── widgets/
+
+```
+
 ---
 
 ## 🤝 Contributing
 
 Contributions, issues, and feature requests are welcome!
-If you'd like to help add **Flutter (Dart)** support to the template engine, please feel free to fork the repository and submit a Pull Request.
+If you'd like to help expand the template engine (e.g., adding GetX/BLoC support for Flutter, or new frameworks), please feel free to fork the repository and submit a Pull Request.
 
 1. Fork the Project
 2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)

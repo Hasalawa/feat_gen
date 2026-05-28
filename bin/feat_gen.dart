@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:args/args.dart';
 import '../lib/spring_generator.dart';
+import '../lib/flutter_generator.dart';
 
 void main(List<String> arguments) {
   // 1. Create the main parser
@@ -63,7 +64,7 @@ void main(List<String> arguments) {
       if (framework == 'spring') {
         generateSpringFeature(featureName, basePackage);
       } else if (framework == 'flutter') {
-        print('🚧 Flutter generation is not yet implemented!');
+        generateFlutterFeature(featureName);
       }
 
     } else {
