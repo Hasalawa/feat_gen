@@ -23,7 +23,7 @@ Instead of manually creating folders and typing repetitive boilerplate code, Fea
 
 ## 🛠️ Installation
 
-1. Go to the [Releases](https://github.com/Hasalawa/feat_gen/releases/tag/v1.0.0) tab of this repository.
+1. Go to the [Releases](https://github.com/Hasalawa/feat_gen/releases/tag/v1.1.0) tab of this repository.
 2. Download the latest `feat_gen.exe` file.
 3. Place it in a folder of your choice (e.g., `C:\tools\featgen`).
 4. **Add to PATH:** Search for "Environment Variables" in Windows, edit the `Path` variable, and add the folder path where you placed `feat_gen.exe`.
