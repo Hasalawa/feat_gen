@@ -3,6 +3,7 @@
 ![Dart](https://img.shields.io/badge/Built_with-Dart-0175C2?logo=dart)
 ![Spring Boot](https://img.shields.io/badge/Target-Spring_Boot-6DB33F?logo=spring)
 ![Flutter](https://img.shields.io/badge/Target-Flutter-02569B?logo=flutter)
+![Firebase](https://img.shields.io/badge/Database-Firebase_Firestore-FFCA28?logo=firebase)
 ![License](https://img.shields.io/badge/License-MIT-blue.svg)
 
 **FeatGen** is a lightning-fast Command Line Interface (CLI) tool designed to automate the creation of **Feature-First Architecture** structures for modern software projects.
@@ -16,6 +17,7 @@ Instead of manually creating folders and typing repetitive boilerplate code, Fea
 * **⚡ Instant Generation:** Generates complete feature layers for both backend and frontend instantly.
 * **☕ Spring Boot Ready:** Automatically writes standard Java annotations (`@RestController`, `@Service`, `@Repository`, `@Entity`) and constructor injections.
 * **📱 Flutter Ready:** Generates UI screens, state controllers, models, and API services with standard Flutter boilerplate.
+* **🛢️ Smart Database Architecture:** Generate standard JPA/SQL boilerplates or seamlessly switch to **Firebase Firestore** using the `--db firebase` flag.
 * **🎯 Custom Packages:** Define your own base package dynamically using the `--package` flag.
 * **🚀 Standalone Executable:** Compiled as a native `.exe` file. You don't need Dart or Java installed on your machine to run the tool!
 
@@ -23,7 +25,7 @@ Instead of manually creating folders and typing repetitive boilerplate code, Fea
 
 ## 🛠️ Installation
 
-1. Go to the [Releases](https://github.com/Hasalawa/feat_gen/releases/tag/v1.1.0) tab of this repository.
+1. Go to the [Releases](https://github.com/Hasalawa/feat_gen/releases) tab of this repository.
 2. Download the latest `feat_gen.exe` file.
 3. Place it in a folder of your choice (e.g., `C:\tools\featgen`).
 4. **Add to PATH:** Search for "Environment Variables" in Windows, edit the `Path` variable, and add the folder path where you placed `feat_gen.exe`.
@@ -39,7 +41,7 @@ Navigate to your project's root directory in the terminal and run the generation
 
 ### Spring Boot (Default)
 
-Create a Spring Boot feature with a custom base package:
+Create a Spring Boot feature with a custom base package (Generates JPA entities by default):
 ```bash
 feat_gen create payment-gateway --package com.yourcompany.app
 
@@ -58,6 +60,24 @@ Use the `--framework` or `-f` flag to target Flutter:
 
 ```bash
 feat_gen create user-profile -f flutter
+
+```
+
+### 🔥 Firebase Integration (New!)
+
+Generate features specifically tailored for Firebase Firestore instead of standard relational databases.
+
+**For Spring Boot (Generates Firestore collections and POJO entities):**
+
+```bash
+feat_gen create product-catalog -p com.shop.app --db firebase
+
+```
+
+**For Flutter (Generates `cloud_firestore` CRUD operations in the service class):**
+
+```bash
+feat_gen create cart-items -f flutter --db firebase
 
 ```
 
@@ -85,6 +105,8 @@ order-management/
 
 ```
 
+*Note: If you add `--db firebase`, the `Repository` and `Entity` classes will be automatically configured for Google Cloud Firestore instead of Spring Data JPA.*
+
 ### 2. Flutter Output
 
 If you run `feat_gen create user-profile -f flutter`, it generates:
@@ -102,6 +124,8 @@ user-profile/
 └── widgets/
 
 ```
+
+*Note: If you add `--db firebase`, the `user_profile_service.dart` file will include ready-to-use CRUD operations using the `cloud_firestore` package.*
 
 ---
 
