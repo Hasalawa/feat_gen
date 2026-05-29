@@ -90,10 +90,25 @@ void main(List<String> arguments) {
 
 // Function to show the help menu
 void printUsage(ArgParser parser) {
-  print('\nFeatGen - Feature-First Architecture Generator');
+  print('\n FeatGen - Feature-First Architecture Generator');
   print('Usage: feat_gen <command> [arguments]');
+
   print('\nAvailable commands:');
   print('  create <feature_name>   Create a new feature structure');
-  print('\nOptions:');
+
+  print('\nGlobal Options:');
   print(parser.usage);
+
+  // Extract and print options specifically for the 'create' command
+  final createUsage = parser.commands['create']?.usage;
+  if (createUsage != null) {
+    print('\nOptions for "create" command:');
+    print(createUsage);
+  }
+
+  print('\nExamples:');
+  print('  feat_gen create ceylon-cart-auth');
+  print('  feat_gen create worker-profile -f flutter');
+  print('  feat_gen create jewelry-catalog -p com.pinkie.app --db firebase');
+  print('');
 }
