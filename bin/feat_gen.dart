@@ -73,7 +73,7 @@ void main(List<String> arguments) {
       if (framework == 'spring') {
         generateSpringFeature(featureName, basePackage, dbType);
       } else if (framework == 'flutter') {
-        generateFlutterFeature(featureName);
+        generateFlutterFeature(featureName, dbType);
       }
 
     } else {

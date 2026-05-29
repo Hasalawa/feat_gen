@@ -16,7 +16,7 @@ String toSnakeCase(String text) {
   return text.replaceAll('-', '_').toLowerCase();
 }
 
-void generateFlutterFeature(String featureName) {
+void generateFlutterFeature(String featureName, String dbType) {
   final featureDir = Directory(featureName);
 
   if (featureDir.existsSync()) {
@@ -53,6 +53,15 @@ void generateFlutterFeature(String featureName) {
   // 4. Service File (API/Local DB)
   File('${featureDir.path}/services/${fileName}_service.dart')
       .writeAsStringSync(getFlutterServiceTemplate(className));
+
+  if (dbType == 'firebase') {
+    File('${featureDir.path}/services/${fileName}_service.dart')
+        .writeAsStringSync(getFlutterFirebaseServiceTemplate(className, fileName));
+  } else {
+    // Default Service Template
+    File('${featureDir.path}/services/${fileName}_service.dart')
+        .writeAsStringSync(getFlutterServiceTemplate(className));
+  }
 
   print('✅ New Flutter Feature generated successfully!');
 }
@@ -132,6 +141,44 @@ class ${className}Service {
       // TODO: Implement API call or Local Cache logic here
     } catch (e) {
       throw Exception('Failed to load data: \$e');
+    }
+  }
+}
+''';
+
+// ==========================================
+// FLUTTER FIREBASE SERVICE TEMPLATE
+// ==========================================
+
+String getFlutterFirebaseServiceTemplate(String className, String fileName) => '''
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '../models/${fileName}_model.dart';
+
+class ${className}Service {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  
+  // Defines the Firestore collection name dynamically
+  final String _collectionPath = '${fileName.replaceAll('_', '-')}s';
+
+  // Add new document to Firestore
+  Future<void> add$className(${className}Model data) async {
+    try {
+      await _firestore.collection(_collectionPath).add(data.toJson());
+    } catch (e) {
+      throw Exception('Failed to add data to Firestore: \$e');
+    }
+  }
+
+  // Fetch document from Firestore by ID
+  Future<${className}Model?> get$className(String id) async {
+    try {
+      DocumentSnapshot doc = await _firestore.collection(_collectionPath).doc(id).get();
+      if (doc.exists) {
+        return ${className}Model.fromJson(doc.data() as Map<String, dynamic>);
+      }
+      return null;
+    } catch (e) {
+      throw Exception('Failed to fetch data from Firestore: \$e');
     }
   }
 }
