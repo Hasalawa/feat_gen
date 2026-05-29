@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] - 2026-05-29
+
+### Added
+- **Database Architecture Flag:** Introduced the `--db` flag to specify the target database architecture (supports `jpa` and `firebase`).
+- **Firebase for Spring Boot:** Auto-generation of Firestore-ready Repository classes and POJO Entities when using `--db firebase`.
+- **Firebase for Flutter:** Auto-generation of Service classes equipped with `cloud_firestore` CRUD operations when using `-f flutter --db firebase`.
+- **Enhanced Help Menu:** Updated the `--help` command output to display command-specific options dynamically, along with new practical usage examples.
+
 ## [1.1.0] - 2026-05-28
 
 ### Added
