@@ -13,7 +13,7 @@ String toPascalCase(String text) {
 // 1. Let's set a Base Package that can be taken from a CLI argument in the future
 const String basePackage = "com.callisto.app";
 
-void generateSpringFeature(String featureName, String basePackage) {
+void generateSpringFeature(String featureName, String basePackage, String dbType) {
   final featureDir = Directory(featureName);
 
   if (featureDir.existsSync()) {
@@ -33,22 +33,37 @@ void generateSpringFeature(String featureName, String basePackage) {
   final featurePackage = featureName.replaceAll('-', '').toLowerCase();
   final fullPackage = '$basePackage.$featurePackage';
 
-  print('📄 Generating Spring Boot Boilerplate code...');
+  print('📄 Generating Spring Boot Boilerplate code for $dbType...');
 
-  // 2. Writing code into files using templates
   File('${featureDir.path}/controller/${className}Controller.java')
       .writeAsStringSync(getControllerTemplate(fullPackage, className, featureName));
 
   File('${featureDir.path}/service/${className}Service.java')
       .writeAsStringSync(getServiceTemplate(fullPackage, className));
 
-  File('${featureDir.path}/repository/${className}Repository.java')
-      .writeAsStringSync(getRepositoryTemplate(fullPackage, className));
+  // 💡 Switch Repository and Entity templates based on DB Type
+  if (dbType == 'firebase') {
+    File('${featureDir.path}/repository/${className}Repository.java')
+        .writeAsStringSync(getFirebaseRepositoryTemplate(fullPackage, className, featureName));
 
-  File('${featureDir.path}/entity/${className}.java')
-      .writeAsStringSync(getEntityTemplate(fullPackage, className, featureName));
+    File('${featureDir.path}/entity/${className}.java')
+        .writeAsStringSync(getFirebaseEntityTemplate(fullPackage, className));
+  } else {
+    // Default JPA (MySQL) Templates
+    File('${featureDir.path}/repository/${className}Repository.java')
+        .writeAsStringSync(getJpaRepositoryTemplate(fullPackage, className));
 
-  print('✅ The new Spring Boot feature was successfully generated!');
+    File('${featureDir.path}/entity/${className}.java')
+        .writeAsStringSync(getJpaEntityTemplate(fullPackage, className, featureName));
+  }
+
+  // DTO files
+  File('${featureDir.path}/dto/${className}Request.java')
+      .writeAsStringSync('package $fullPackage.dto;\n\npublic class ${className}Request {}\n');
+  File('${featureDir.path}/dto/${className}Response.java')
+      .writeAsStringSync('package $fullPackage.dto;\n\npublic class ${className}Response {}\n');
+
+  print('✅ New Spring Boot Feature generated successfully!');
 }
 
 // ==========================================
@@ -96,7 +111,7 @@ public class ${className}Service {
 }
 ''';
 
-String getRepositoryTemplate(String pkg, String className) => '''
+String getJpaRepositoryTemplate(String pkg, String className) => '''
 package $pkg.repository;
 
 import $pkg.entity.$className;
@@ -108,7 +123,7 @@ public interface ${className}Repository extends JpaRepository<$className, Long> 
 }
 ''';
 
-String getEntityTemplate(String pkg, String className, String featureName) => '''
+String getJpaEntityTemplate(String pkg, String className, String featureName) => '''
 package $pkg.entity;
 
 import jakarta.persistence.*;
@@ -130,5 +145,55 @@ public class $className {
     public void setId(Long id) {
         this.id = id;
     }
+}
+''';
+
+// ==========================================
+// FIREBASE TEMPLATES
+// ==========================================
+
+String getFirebaseEntityTemplate(String pkg, String className) => '''
+package $pkg.entity;
+
+// POJO class for Firebase Firestore
+public class $className {
+
+    private String id; // Firestore uses String for document IDs
+
+    // TODO: Add extra fields here
+
+    public $className() {}
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+}
+''';
+
+String getFirebaseRepositoryTemplate(String pkg, String className, String featureName) => '''
+package $pkg.repository;
+
+import $pkg.entity.$className;
+import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.CollectionReference;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public class ${className}Repository {
+
+    private final Firestore firestore;
+    private final CollectionReference collection;
+
+    public ${className}Repository(Firestore firestore) {
+        this.firestore = firestore;
+        // Defines the Firestore collection name dynamically
+        this.collection = firestore.collection("${featureName.replaceAll('-', '_')}");
+    }
+
+    // TODO: Add Firestore CRUD operations here (save, findById, etc.)
 }
 ''';

@@ -24,6 +24,13 @@ void main(List<String> arguments) {
     defaultsTo: 'com.callisto.app', // If a package is not provided, this will be the default
   );
 
+  createCommand.addOption(
+    'db',
+    help: 'Target database architecture (jpa/firebase)',
+    allowed: ['jpa', 'firebase'],
+    defaultsTo: 'jpa', // Default JPA
+  );
+
   parser.addCommand('create', createCommand);
 
   // Help flag
@@ -46,6 +53,7 @@ void main(List<String> arguments) {
       final featureName = createResults.rest.isNotEmpty ? createResults.rest.first : null;
       final framework = createResults['framework'];
       final basePackage = createResults['package'];
+      final dbType = createResults['db'];
 
       if (featureName == null) {
         print('❌ Error: Please provide a feature name.');
@@ -60,9 +68,10 @@ void main(List<String> arguments) {
       print('📌 Feature: $featureName');
       print('🛠️ Framework: $framework\n');
       print('📦 Package: $basePackage\n');
+      print('🛢️ Database: $dbType\n');
 
       if (framework == 'spring') {
-        generateSpringFeature(featureName, basePackage);
+        generateSpringFeature(featureName, basePackage, dbType);
       } else if (framework == 'flutter') {
         generateFlutterFeature(featureName);
       }
